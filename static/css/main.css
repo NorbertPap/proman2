@@ -1,0 +1,111 @@
+.cards_column {
+    padding: 20px 0 20px 0;
+}
+
+.card {
+    border-color: #1D6FD2;
+    background-color: #FFFFFF;
+    padding: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1F1F1F;
+}
+
+.row.private-1 {
+    background-color: #1F1F1F;
+    padding: 30px;
+    margin: -10px;
+}
+
+.row.private-0 {
+    background-color: #686469;
+    padding: 30px;
+    margin: -10px;
+}
+
+
+.col {
+    margin: 0 5px;
+    background-color: #CCCDCF;
+    padding: 20px;
+}
+
+.body-content {
+    margin: 50px;
+}
+
+h2 {
+    color: white;
+}
+
+
+.navbar-brand {
+    font-size: 25px;
+}
+
+.status-text {
+    color: white;
+}
+
+body {
+    background-color:  #1D6FD2;
+}
+
+
+.fas.fa-angle-up.board-title{
+    float: right;
+}
+
+.btn-group {
+    padding-left: 25%;
+}
+
+.submit-btn {
+    padding-top: 5%;
+    text-align: center;
+}
+
+.form-group {
+    padding: 1%;
+}
+
+input[type=text]{
+    background-color: #ededed;
+}
+
+input[type=email]{
+    background-color: #ededed;
+}
+
+input[type=password]{
+    background-color: #ededed;
+}
+
+#alert-text {
+    color: darkred;
+    text-align: center;
+}
+
+#new-board-input {
+    width: 40%;
+}
+
+.container {
+    margin: 30px;
+}
+
+.input-area {
+    text-align: center;
+}
+
+#new-board-input {
+    margin: auto;
+}
+
+#add-board {
+    margin-bottom: 10px;
+}
+
+.margined {
+    margin: 0 20px;
+}

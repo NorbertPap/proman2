@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ProMan</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/lux/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="{{ url_for('static', filename='js/data_handler.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/dom.js') }}" defer></script>
+
+    <!-- Dragula js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css" />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js' defer></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" defer></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" defer></script>
+</head>
+<body>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-primary active">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked=""> Login
+                    </label>
+                    <label class="btn btn-outline-primary">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Register
+                    </label>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div id="alert-text"></div>
+                    <div class="alert alert-dismissible alert-danger" hidden>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Invalid E-mail or password!</strong>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="E-mail">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <div class="submit-btn">
+                        <button type="button" class="btn btn-info" id="login-register-btn">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal end -->
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">ProMan</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            {% if status == 'Not logged in' %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter">Login / Register <span class="sr-only">(current)</span></a>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
+                </li>
+            {% endif %}
+        </ul>
+        <div class="form-inline my-2 my-lg-0">
+            {% if status == 'Not logged in' %}
+                <div class="status-text">
+                    Not logged in!
+                </div>
+            {% else %}
+                <div class="status-text">
+                    {{ status }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+<!-- Navbar end -->
+<div class="body-content">
+    <div class="input-area">
+        <button type="button" id="add-board" class="btn btn-primary">Add board</button>
+        <div id="new-board-input" hidden>
+            <form class="form-inline">
+                <label class="sr-only" for="new-board-name">Board name</label>
+                <input type="text" class="form-control mb-2 mr-sm-2" id="new-board-name" placeholder="Board name">
+                {% if status != 'Not logged in' %}
+                    <div class="form-check mb-2 mr-sm-2">
+                        <input class="form-check-input" type="checkbox" id="private-checkbox">
+                        <label class="form-check-label" for="private-checkbox">
+                            Private
+                        </label>
+                    </div>
+                {% endif %}
+                <button type="button" class="btn btn-primary mb-2" id="create-board">Create Board</button>
+                <button type="button" class="btn btn-secondary mb-2" id="cancel-board">Cancel</button>
+            </form>
+        </div>
+    </div>
+    {% if board_tree|length == 0 %}
+        <p>No boards yet</p>
+    {% else %}
+        <div class="boards-space" align="center">
+            {% for i in range(board_tree|length) %}
+                <div class="container" id="{{board_tree[i].get('id')}}">
+                    <h2 class="row private-{{board_tree[i].get('private')}}">
+                        {{ board_tree[i].get('title') }}
+                        <i class="fas fa-angle-up"></i>
+                        <form class="form-inline margined">
+                            <input type="text" class="form-control" value="" id="{{board_tree[i].get('id')}}-input">
+                            <button type="button" class="btn btn-outline-secondary column" id="{{board_tree[i].get('id')}}-column">Create new column</button>
+                        </form>
+                    </h2>
+                    <div class="row private-{{board_tree[i].get('private')}}" id="{{ i }}-body">
+                        {% for j in range(board_tree[i].get('columns')|length) %}
+                            <!-- column -->
+                            <div class="col column-space" >
+                                <h4>{{ board_tree[i].get('columns')[j].get('column_name') }}</h4>
+                                <div id="{{ i }}{{ j }}" class="cards_column">
+                                    {% for card in board_tree[i].get('columns')[j].get('cards') %}
+                                        <div class="card">{{ card.get('title') }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div align="center">
+                                    <button type="button" class="btn btn-primary btn-sm">Add new card</button>
+                                </div>
+                            <!-- end column -->
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>
