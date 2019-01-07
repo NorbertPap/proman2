@@ -217,7 +217,7 @@ function loginButton()
 
 const createNewColumn = (columnName, boardId) => {
     const url = '/column';
-    const userInput = {columnName: columnName, boardId: boardId};
+    const userInput = {columnName: columnName, boardId: Number(boardId)};
     fetch(url, {
         method: 'POST',
         headers: {
@@ -233,11 +233,12 @@ const createNewColumn = (columnName, boardId) => {
     });
 };
 
+// better name for this function
 const buttonPress = () => {
-    const btnList = document.querySelectorAll('.column');
+    const btnList = document.getElementsByClassName('column');
     for (let btn of btnList) {
-        const inputId = btn.id[0] + '-input';
-        const boardId = btn.id[0];
+        const boardId = btn.id.replace('-column', '');
+        const inputId = btn.id.replace('-column', '-input');
         btn.addEventListener('click', () => {
             newColumn(inputId, boardId);
         });
@@ -250,7 +251,7 @@ const newColumn = (inputId, boardId) => {
     if (inputValue !== '') {
         createNewColumn(inputValue, boardId);
     } else {
-        console.log(alert('missing column name'))
+        alert('missing column name');
     }
 };
 

@@ -30,8 +30,6 @@ def register_new_board():
     new_board_name = request.json.get('boardName')
     new_board_type = request.json.get('boardType')
     user_id = session.get('user_id')
-    if user_id is None:
-        user_id = 1001
     data_manager.register_new_board(new_board_name, new_board_type, user_id)
     return json.dumps({'attempt': 'successful'})
 
