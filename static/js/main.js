@@ -149,6 +149,7 @@ function switchContentBoard(response)
     makeCardsDragAndDroppable();
     makeBoardAddingButtonFunctional();
     buttonPress();
+    openBoards();
 }
 
 

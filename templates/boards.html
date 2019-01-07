@@ -126,13 +126,13 @@
                 <div class="container" id="{{board_tree[i].get('id')}}">
                     <h2 class="row private-{{board_tree[i].get('private')}}">
                         {{ board_tree[i].get('title') }}
-                        <i class="fas fa-angle-up"></i>
+                        <i class="fas fa-angle-up board-opener"></i>
                         <form class="form-inline margined">
                             <input type="text" class="form-control" value="" id="{{board_tree[i].get('id')}}-input">
                             <button type="button" class="btn btn-outline-secondary column" id="{{board_tree[i].get('id')}}-column">Create new column</button>
                         </form>
                     </h2>
-                    <div class="row private-{{board_tree[i].get('private')}}" id="{{ i }}-body">
+                    <div class="row private-{{board_tree[i].get('private')}}" id="{{ i }}-body" hidden>
                         {% for j in range(board_tree[i].get('columns')|length) %}
                             <!-- column -->
                             <div class="col column-space" >
