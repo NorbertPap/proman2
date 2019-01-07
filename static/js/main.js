@@ -96,7 +96,7 @@ function createInputForNewBoard()
 function registerNewBoard() {
     let boardName = document.getElementById('new-board-name').value;
     let boardType;
-    if (document.getElementById('private-checkbox') === null) {
+    if (document.getElementById('private-checkbox') !== null) {
         boardType = document.getElementById('private-checkbox').checked ? 'private' : 'public';
     }
     else
@@ -147,6 +147,7 @@ function switchContentBoard(response)
     let oldBoardsSpace = document.getElementsByClassName('boards-space')[0];
     oldBoardsSpace.parentElement.replaceChild(newBoardsSpace, oldBoardsSpace);
     makeCardsDragAndDroppable();
+    makeBoardAddingButtonFunctional();
     buttonPress();
 }
 
@@ -256,7 +257,8 @@ const newColumn = (inputId, boardId) => {
 };
 
 function closeInput() {
-    document.getElementById('new-board-input').innerHTML = '';
+    document.getElementById('new-board-input').hidden = true;
+    document.getElementById('new-board-input').value = '';
     document.getElementById('add-board').disabled = false;
 }
 
