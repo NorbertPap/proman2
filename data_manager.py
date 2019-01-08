@@ -69,3 +69,13 @@ def register_new_board(cursor, board_name, board_type, user_id):
 def add_new_column(cursor, column_name, board_id):
     cursor.execute("""INSERT INTO board_columns (column_name, board_id)
                       VALUES (%(column_name)s, %(board_id)s)""", {'column_name': column_name, 'board_id': board_id})
+
+
+@connection.connection_handler
+def edit_title(cursor, type, title, board_id, original):
+    if type == 'board_title':
+        cursor.execute("""UPDATE boards SET title = %(title)s WHERE id = %(board_id)s""", {'title': title, 'board_id': board_id})
+    else:
+        cursor.execute("""UPDATE board_columns SET column_name = %(title)s 
+        WHERE board_id = %(board_id)s AND column_name = %(original)s""",
+                       {'title': title, 'board_id': board_id, 'original': original})

@@ -7,6 +7,8 @@ function init() {
     makeBoardAddingButtonFunctional();
     buttonPress();
     openBoards();
+    makeTitleEditable();
+    deleteButton();
     // init data
     dataHandler.init();
     // loads the boards to the screen
@@ -261,6 +263,58 @@ function closeInput() {
     document.getElementById('new-board-input').hidden = true;
     document.getElementById('new-board-input').value = '';
     document.getElementById('add-board').disabled = false;
+}
+
+function makeTitleEditable() {
+    const spans = document.getElementsByTagName('span');
+    for (const span of spans) {
+        if (span.contentEditable) {
+            span.onblur = function () {
+                const url = '/edit_titles';
+                const subject = {subject: 'board_title', title: span.innerText, id: span.getAttribute('data-id')};
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify(subject)
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                });
+            }
+        }
+    }
+    const column_names = document.getElementsByTagName('h4');
+    for (const column of column_names) {
+        if (column.contentEditable) {
+            column.onblur = function () {
+                const url = '/edit_titles';
+                const subject = {subject: 'column_title', title: column.innerText, original: column.getAttribute('data-original'), id: column.getAttribute('data-boardid')};
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify(subject)
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                });
+            }
+        }
+    }
+}
+
+
+function deleteButton() {
+    const deleteButtons = document.getElementsByClassName('fa-times');
+    for (let button of deleteButtons) {
+        button.addEventListener('click', function (event) {
+            const asd = event.target;
+            console.log(asd.getAttribute('id').replace('x', ''));
+        })
+    }
 }
 
 

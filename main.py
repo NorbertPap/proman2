@@ -42,6 +42,12 @@ def add_new_column():
     return json.dumps({'attempt': 'successful'})
 
 
+@app.route('/edit_titles', methods=['POST'])
+def edit_titles():
+    data_manager.edit_title(request.json.get('subject'), request.json.get('title'), request.json.get('id'), request.json.get('original'))
+    return json.dumps({'attempt': 'successful'})
+
+
 @app.route("/")
 def boards():
     ''' this is a one-pager which shows all the boards and cards '''
@@ -70,7 +76,6 @@ def login_and_register():
         check_user = data_manager.register_new_user(data['username'], password, data['email'])
         if check_user is True:
             check_user = data_manager.user_login(data['email'], data['password'])
-            print(check_user)
             session['logged_in'] = True
             session['username'] = check_user[2]
             session['user_id'] = check_user[1]

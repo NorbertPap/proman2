@@ -125,18 +125,19 @@
             {% for i in range(board_tree|length) %}
                 <div class="container" id="{{board_tree[i].get('id')}}">
                     <h2 class="row private-{{board_tree[i].get('private')}}">
-                        {{ board_tree[i].get('title') }}
+                        <span data-id="{{board_tree[i].get('id')}}" contenteditable="true">{{ board_tree[i].get('title') }}</span>
                         <i class="fas fa-angle-down board-opener"></i>
                         <form class="form-inline margined">
                             <input type="text" class="form-control" value="" id="{{board_tree[i].get('id')}}-input">
                             <button type="button" class="btn btn-outline-secondary column" id="{{board_tree[i].get('id')}}-column">Create new column</button>
                         </form>
+                        <i id="x{{board_tree[i].get('id')}}" class="fas fa-times"></i>
                     </h2>
                     <div class="row private-{{board_tree[i].get('private')}}" id="{{ i }}-body" hidden>
                         {% for j in range(board_tree[i].get('columns')|length) %}
                             <!-- column -->
                             <div class="col column-space" >
-                                <h4>{{ board_tree[i].get('columns')[j].get('column_name') }}</h4>
+                                <h4 data-boardid="{{board_tree[i].get('id')}}" data-original="{{ board_tree[i].get('columns')[j].get('column_name') }}" contenteditable="true">{{ board_tree[i].get('columns')[j].get('column_name') }}</h4>
                                 <div id="{{ i }}{{ j }}" class="cards_column">
                                     {% for card in board_tree[i].get('columns')[j].get('cards') %}
                                         <div class="card">{{ card.get('title') }}</div>
