@@ -118,10 +118,10 @@
             </form>
         </div>
     </div>
-    {% if board_tree|length == 0 %}
-        <p>No boards yet</p>
-    {% else %}
-        <div class="boards-space" align="center">
+    <div class="boards-space" align="center">
+        {% if board_tree|length == 0 %}
+            <p>No boards yet</p>
+        {% else %}
             {% for i in range(board_tree|length) %}
                 <div class="container" id="{{board_tree[i].get('id')}}">
                     <h2 class="row private-{{board_tree[i].get('private')}}">
@@ -151,8 +151,8 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 </body>
 </html>
