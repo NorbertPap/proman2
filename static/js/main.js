@@ -7,10 +7,7 @@ function init() {
     makeBoardAddingButtonFunctional();
     buttonPress();
     openBoards();
-    // init data
-    dataHandler.init();
-    // loads the boards to the screen
-    dom.loadBoards();
+    newCardButtonPress();
 }
 
 function openBoards()
@@ -150,6 +147,7 @@ function switchContentBoard(response)
     makeBoardAddingButtonFunctional();
     buttonPress();
     openBoards();
+    newCardButtonPress();
 }
 
 
@@ -257,11 +255,50 @@ const newColumn = (inputId, boardId) => {
     }
 };
 
+
 function closeInput() {
     document.getElementById('new-board-input').hidden = true;
     document.getElementById('new-board-input').value = '';
     document.getElementById('add-board').disabled = false;
 }
+
+const newCardButtonPress = () => {
+    const btnList = document.getElementsByClassName('new-card');
+    for (let btn of btnList) {
+        btn.addEventListener('click', newCard);
+    }
+};
+
+
+const newCard= (event) => {
+    const inputValue = event.target.parentElement.firstChild.nextSibling.value;
+    const boardColumnId = event.target.parentElement.parentElement.id;
+    const position = event.target.parentElement.previousElementSibling.childElementCount+1;
+    if (inputValue !== '') {
+        createNewCard(inputValue, boardColumnId, position);
+    } else {
+        alert('missing card name');
+    }
+};
+
+
+const createNewCard = (cardName, boardColumnId, position) => {
+    const url = '/card';
+    const userInput = {cardName: cardName, boardColumnId: Number(boardColumnId), position: position};
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(userInput)
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if(data.attempt === 'successful') {
+            reloadPageBoard();
+        }
+    });
+};
 
 
 init();

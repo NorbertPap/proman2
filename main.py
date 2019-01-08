@@ -42,6 +42,15 @@ def add_new_column():
     return json.dumps({'attempt': 'successful'})
 
 
+@app.route('/card', methods=['POST'])
+def add_new_card():
+    card_name = request.json.get('cardName')
+    board_column_id = request.json.get('boardColumnId')
+    position = request.json.get('position')
+    data_manager.add_new_card(card_name, board_column_id, position)
+    return json.dumps({'attempt': 'successful'})
+
+
 @app.route("/")
 def boards():
     ''' this is a one-pager which shows all the boards and cards '''

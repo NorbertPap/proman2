@@ -135,7 +135,7 @@
                     <div class="row private-{{board_tree[i].get('private')}}" id="{{ i }}-body" hidden>
                         {% for j in range(board_tree[i].get('columns')|length) %}
                             <!-- column -->
-                            <div class="col column-space" >
+                            <div class="col column-space" id="{{board_tree[i].get('columns')[j].get('id')}}">
                                 <h4>{{ board_tree[i].get('columns')[j].get('column_name') }}</h4>
                                 <div id="{{ i }}{{ j }}" class="cards_column">
                                     {% for card in board_tree[i].get('columns')[j].get('cards') %}
@@ -143,7 +143,8 @@
                                     {% endfor %}
                                 </div>
                                 <div align="center">
-                                    <button type="button" class="btn btn-primary btn-sm">Add new card</button>
+                                    <input type="text" class="form-control" value="" id="{{board_tree[i].get('columns')[j].get('id')}}-card-input">
+                                    <button type="button" class="btn btn-primary btn-sm new-card">Add new card</button>
                                 </div>
                             <!-- end column -->
                             </div>
