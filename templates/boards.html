@@ -144,7 +144,8 @@
                                     {% endfor %}
                                 </div>
                                 <div align="center">
-                                    <button type="button" class="btn btn-primary btn-sm">Add new card</button>
+                                    <input type="text" class="form-control" value="" id="{{board_tree[i].get('columns')[j].get('id')}}-card-input">
+                                    <button type="button" class="btn btn-primary btn-sm new-card">Add new card</button>
                                 </div>
                             <!-- end column -->
                             </div>

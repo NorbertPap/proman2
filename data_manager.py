@@ -79,3 +79,9 @@ def edit_title(cursor, type, title, board_id, original):
         cursor.execute("""UPDATE board_columns SET column_name = %(title)s 
         WHERE board_id = %(board_id)s AND column_name = %(original)s""",
                        {'title': title, 'board_id': board_id, 'original': original})
+
+
+@connection.connection_handler
+def add_new_card(cursor, card_name, board_column_id, position):
+    cursor.execute("""INSERT INTO cards (title, board_column_id, position)
+                      VALUES (%(card_name)s, %(board_column_id)s, %(position)s)""", {'card_name': card_name, 'board_column_id': board_column_id, 'position': position})
