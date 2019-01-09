@@ -17,18 +17,18 @@ function boardOpener()
     let boardOpenerElements = document.getElementsByClassName('board-opener');
     for(let boardOpenerElement of boardOpenerElements)
     {
-        boardOpenerElement.addEventListener('click', openBoard);
+        boardOpenerElement.addEventListener('click', function() { openBoard(event.target.parentElement.parentElement) });
     }
 }
 
 
-function openBoard(event)
+function openBoard(board)
 {
-    event.target.parentElement.nextElementSibling.hidden = false;
-    let board_id = Number(event.target.parentElement.parentElement.id);
+    board.firstElementChild.nextElementSibling.hidden = false;
+    let board_id = Number(board.id);
     document.cookie = `${board_id}=`;
     document.cookie = `${board_id}=opened`;
-    changeArrowToUpside(event.target);
+    changeArrowToUpside(board.firstElementChild.firstElementChild.nextElementSibling);
 }
 
 
@@ -38,16 +38,16 @@ function changeArrowToUpside(downsideArrow)
     upsideArrow.classList.add('fas');
     upsideArrow.classList.add('fa-angle-up');
     downsideArrow.parentElement.replaceChild(upsideArrow, downsideArrow);
-    upsideArrow.addEventListener('click', closeBoard)
+    upsideArrow.addEventListener('click', function() { closeBoard(event.target.parentElement.parentElement) })
 }
 
-function closeBoard(event)
+function closeBoard(board)
 {
-    event.target.parentElement.nextElementSibling.hidden = true;
-    let board_id = Number(event.target.parentElement.parentElement.id);
+    board.firstElementChild.nextElementSibling.hidden = true;
+    let board_id = Number(board.id);
     document.cookie = `${board_id}=`;
     document.cookie = `${board_id}=closed`;
-    changeArrowToDownside(event.target);
+    changeArrowToDownside(board.firstElementChild.firstElementChild.nextElementSibling);
 }
 
 
@@ -57,7 +57,7 @@ function changeArrowToDownside(upsideArrow)
     downsideArrow.classList.add('fas');
     downsideArrow.classList.add('fa-angle-down');
     upsideArrow.parentElement.replaceChild(downsideArrow, upsideArrow);
-    downsideArrow.addEventListener('click', openBoard)
+    downsideArrow.addEventListener('click', function() { openBoard(event.target.parentElement.parentElement) })
 }
 
 
@@ -174,19 +174,9 @@ function openedBoardHandler()
     let boards = document.getElementsByClassName('board');
     for(let board of boards)
     {
-
         if(openedBoards.includes(board.id))
         {
-            document.getElementById(`${board.id}`).lastChild.hidden = true;
-            document.cookie = `${board.id}=`;
-            document.cookie = `${board.id}=opened`;
-
-            let upsideArrow = document.createElement('i');
-            upsideArrow.classList.add('fas');
-            upsideArrow.classList.add('fa-angle-up');
-            let downsideArrow = board.firstElementChild.firstElementChild.nextElementSibling;
-            downsideArrow.parentElement.replaceChild(upsideArrow, downsideArrow);
-            upsideArrow.addEventListener('click', closeBoard)
+            openBoard(board);
         }
     }
 }
@@ -296,11 +286,13 @@ const newColumn = (inputId, boardId) => {
     }
 };
 
+
 function closeInput() {
     document.getElementById('new-board-input').hidden = true;
     document.getElementById('new-board-input').value = '';
     document.getElementById('add-board').disabled = false;
 }
+
 
 function makeTitleEditable() {
     const spans = document.getElementsByTagName('span');
