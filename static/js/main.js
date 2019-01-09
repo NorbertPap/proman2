@@ -5,10 +5,10 @@ function init() {
     registerButton();
     makeCardsDragAndDroppable();
     makeBoardAddingButtonFunctional();
-    buttonPress();
+    newColumnButtonPress();
     newCardButtonPress();
     makeTitleEditable();
-    deleteButton();
+    // deleteButton();
     boardOpener();
     openedBoardHandler();
 }
@@ -70,7 +70,8 @@ function makeCardsDragAndDroppable() {
         {
             columns.push(document.getElementById(`${String(i)+String(j)}`));
         }
-        dragula(columns);
+        let drake = dragula(columns);
+        drake.on('drop', handleCardMoving);
     }
 }
 
@@ -154,9 +155,9 @@ function switchContentBoard(response)
     oldBoardsSpace.parentElement.replaceChild(newBoardsSpace, oldBoardsSpace);
     makeCardsDragAndDroppable();
     makeBoardAddingButtonFunctional();
-    buttonPress();
+    newColumnButtonPress();
     boardOpener();
-    openedBoardHandler()
+    openedBoardHandler();
     newCardButtonPress();
 }
 
@@ -183,6 +184,61 @@ function openedBoardHandler()
     }
 }
 
+
+function handleCardMoving(card, targetColumn, sourceColumn, siblingElement)
+{
+    changeBoardColumnIdOfCard(card, targetColumn);
+    refreshPositionOfCards(sourceColumn);
+    refreshPositionOfCards(targetColumn);
+}
+
+
+function changeBoardColumnIdOfCard(card, targetColumn)
+{
+    const newBoardColumnId = Number(targetColumn.parentElement.id);
+    const cardId = Number(card.dataset.card_id);
+    const url = '/update-card-column-id';
+    const data = {newBoardColumnId: newBoardColumnId, cardId: cardId};
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if(data.attempt === 'successful'){}
+    });
+}
+
+
+function refreshPositionOfCards(column)
+{
+    let cards = column.children;
+    if(cards.length === 0) return;
+
+    let idsAndPositions = {};
+    let position = 0;
+    let url = '/update-card-positions';
+    for(let card of cards)
+    {
+        position+=1;
+        idsAndPositions[position] = Number(card.dataset.card_id);
+    }
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(idsAndPositions)
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if(data.attempt === 'successful'){}
+    });
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -267,7 +323,7 @@ const createNewColumn = (columnName, boardId) => {
 };
 
 // better name for this function
-const buttonPress = () => {
+const newColumnButtonPress = () => {
     const btnList = document.getElementsByClassName('column');
     for (let btn of btnList) {
         const boardId = btn.id.replace('-column', '');
@@ -336,6 +392,8 @@ function makeTitleEditable() {
         }
     }
 }
+
+
 const newCardButtonPress = () => {
     const btnList = document.getElementsByClassName('new-card');
     for (let btn of btnList) {
@@ -344,7 +402,7 @@ const newCardButtonPress = () => {
 };
 
 
-const newCard= (event) => {
+const newCard = (event) => {
     const inputValue = event.target.parentElement.firstChild.nextSibling.value;
     const boardColumnId = event.target.parentElement.parentElement.id;
     const position = event.target.parentElement.previousElementSibling.childElementCount+1;

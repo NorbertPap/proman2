@@ -140,7 +140,7 @@
                                 <h4 data-boardid="{{board_tree[i].get('id')}}" data-original="{{ board_tree[i].get('columns')[j].get('column_name') }}" contenteditable="true">{{ board_tree[i].get('columns')[j].get('column_name') }}</h4>
                                 <div id="{{ i }}{{ j }}" class="cards_column">
                                     {% for card in board_tree[i].get('columns')[j].get('cards') %}
-                                        <div class="card">{{ card.get('title') }}</div>
+                                        <div class="card" data-card_id="{{ card.get('id') }}">{{ card.get('title') }}</div>
                                     {% endfor %}
                                 </div>
                                 <div align="center">

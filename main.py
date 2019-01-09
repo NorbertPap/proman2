@@ -57,6 +57,20 @@ def add_new_card():
     return json.dumps({'attempt': 'successful'})
 
 
+@app.route('/update-card-column-id', methods=['POST'])
+def update_card_board_column_id():
+    new_board_column_id = request.json.get('newBoardColumnId')
+    card_id = request.json.get('cardId')
+    data_manager.update_card_board_column_id(card_id, new_board_column_id)
+    return json.dumps({'attempt': 'successful'})
+
+
+@app.route('/update-card-positions', methods=['POST'])
+def update_card_positions():
+    data_manager.update_card_positions(request.json)
+    return json.dumps({'attempt': 'successful'})
+
+
 @app.route("/")
 def boards():
     ''' this is a one-pager which shows all the boards and cards '''
