@@ -6,30 +6,30 @@ function init() {
     makeCardsDragAndDroppable();
     makeBoardAddingButtonFunctional();
     buttonPress();
-    openBoards();
     newCardButtonPress();
     makeTitleEditable();
     deleteButton();
-    // init data
-    dataHandler.init();
-    // loads the boards to the screen
-    dom.loadBoards();
+    boardOpener();
+    openedBoardHandler();
 }
 
-function openBoards()
+function boardOpener()
 {
     let boardOpenerElements = document.getElementsByClassName('board-opener');
     for(let boardOpenerElement of boardOpenerElements)
     {
-        boardOpenerElement.addEventListener('click', openBoard);
+        boardOpenerElement.addEventListener('click', function() { openBoard(event.target.parentElement.parentElement) });
     }
 }
 
 
-function openBoard(event)
+function openBoard(board)
 {
-    event.target.parentElement.nextElementSibling.hidden = false;
-    changeArrowToUpside(event.target);
+    board.firstElementChild.nextElementSibling.hidden = false;
+    let board_id = Number(board.id);
+    document.cookie = `${board_id}=`;
+    document.cookie = `${board_id}=opened`;
+    changeArrowToUpside(board.firstElementChild.firstElementChild.nextElementSibling);
 }
 
 
@@ -39,13 +39,16 @@ function changeArrowToUpside(downsideArrow)
     upsideArrow.classList.add('fas');
     upsideArrow.classList.add('fa-angle-up');
     downsideArrow.parentElement.replaceChild(upsideArrow, downsideArrow);
-    upsideArrow.addEventListener('click', closeBoard)
+    upsideArrow.addEventListener('click', function() { closeBoard(event.target.parentElement.parentElement) })
 }
 
-function closeBoard(event)
+function closeBoard(board)
 {
-    event.target.parentElement.nextElementSibling.hidden = true;
-    changeArrowToDownside(event.target);
+    board.firstElementChild.nextElementSibling.hidden = true;
+    let board_id = Number(board.id);
+    document.cookie = `${board_id}=`;
+    document.cookie = `${board_id}=closed`;
+    changeArrowToDownside(board.firstElementChild.firstElementChild.nextElementSibling);
 }
 
 
@@ -55,7 +58,7 @@ function changeArrowToDownside(upsideArrow)
     downsideArrow.classList.add('fas');
     downsideArrow.classList.add('fa-angle-down');
     upsideArrow.parentElement.replaceChild(downsideArrow, upsideArrow);
-    downsideArrow.addEventListener('click', openBoard)
+    downsideArrow.addEventListener('click', function() { openBoard(event.target.parentElement.parentElement) })
 }
 
 
@@ -152,8 +155,32 @@ function switchContentBoard(response)
     makeCardsDragAndDroppable();
     makeBoardAddingButtonFunctional();
     buttonPress();
-    openBoards();
+    boardOpener();
+    openedBoardHandler()
     newCardButtonPress();
+}
+
+
+function openedBoardHandler()
+{
+    let cookies = document.cookie.split('; ');
+    let openedBoards = [];
+    for(let cookie of cookies)
+    {
+        cookie = cookie.split('=');
+        if(cookie[1] === 'opened')
+        {
+            openedBoards.push(cookie[0]);
+        }
+    }
+    let boards = document.getElementsByClassName('board');
+    for(let board of boards)
+    {
+        if(openedBoards.includes(board.id))
+        {
+            openBoard(board);
+        }
+    }
 }
 
 
@@ -267,6 +294,7 @@ function closeInput() {
     document.getElementById('new-board-input').value = '';
     document.getElementById('add-board').disabled = false;
 }
+
 
 function makeTitleEditable() {
     const spans = document.getElementsByTagName('span');

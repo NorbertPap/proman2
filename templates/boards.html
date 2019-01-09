@@ -123,7 +123,7 @@
             <p>No boards yet</p>
         {% else %}
             {% for i in range(board_tree|length) %}
-                <div class="container" id="{{board_tree[i].get('id')}}">
+                <div class="container board" id="{{board_tree[i].get('id')}}">
                     <h2 class="row private-{{board_tree[i].get('private')}}">
                         <span data-id="{{board_tree[i].get('id')}}" contenteditable="true">{{ board_tree[i].get('title') }}</span>
                         <i class="fas fa-angle-down board-opener"></i>
