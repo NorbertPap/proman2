@@ -85,3 +85,19 @@ def edit_title(cursor, type, title, board_id, original):
 def add_new_card(cursor, card_name, board_column_id, position):
     cursor.execute("""INSERT INTO cards (title, board_column_id, position)
                       VALUES (%(card_name)s, %(board_column_id)s, %(position)s)""", {'card_name': card_name, 'board_column_id': board_column_id, 'position': position})
+
+
+@connection.connection_handler
+def update_card_board_column_id(cursor, card_id, new_board_column_id):
+    cursor.execute("""UPDATE cards
+                      SET board_column_id = %(new_board_column_id)s
+                      WHERE id = %(card_id)s""", {'new_board_column_id': new_board_column_id, 'card_id': card_id})
+
+
+@connection.connection_handler
+def update_card_positions(cursor, ids_and_positions):
+    for position in ids_and_positions:
+        cursor.execute("""UPDATE cards
+                          SET position = %(position)s
+                          WHERE id = %(card_id)s""",
+                          {'position': int(position), 'card_id': int(ids_and_positions.get(position))})
