@@ -6,16 +6,13 @@ function init() {
     makeCardsDragAndDroppable();
     makeBoardAddingButtonFunctional();
     buttonPress();
-    openBoards();
     makeTitleEditable();
     deleteButton();
-    // init data
-    dataHandler.init();
-    // loads the boards to the screen
-    dom.loadBoards();
+    boardOpener();
+    openedBoardHandler();
 }
 
-function openBoards()
+function boardOpener()
 {
     let boardOpenerElements = document.getElementsByClassName('board-opener');
     for(let boardOpenerElement of boardOpenerElements)
@@ -28,6 +25,9 @@ function openBoards()
 function openBoard(event)
 {
     event.target.parentElement.nextElementSibling.hidden = false;
+    let board_id = Number(event.target.parentElement.parentElement.id);
+    document.cookie = `${board_id}=`;
+    document.cookie = `${board_id}=opened`;
     changeArrowToUpside(event.target);
 }
 
@@ -44,6 +44,9 @@ function changeArrowToUpside(downsideArrow)
 function closeBoard(event)
 {
     event.target.parentElement.nextElementSibling.hidden = true;
+    let board_id = Number(event.target.parentElement.parentElement.id);
+    document.cookie = `${board_id}=`;
+    document.cookie = `${board_id}=closed`;
     changeArrowToDownside(event.target);
 }
 
@@ -151,7 +154,41 @@ function switchContentBoard(response)
     makeCardsDragAndDroppable();
     makeBoardAddingButtonFunctional();
     buttonPress();
-    openBoards();
+    boardOpener();
+    openedBoardHandler()
+}
+
+
+function openedBoardHandler()
+{
+    let cookies = document.cookie.split('; ');
+    let openedBoards = [];
+    for(let cookie of cookies)
+    {
+        cookie = cookie.split('=');
+        if(cookie[1] === 'opened')
+        {
+            openedBoards.push(cookie[0]);
+        }
+    }
+    let boards = document.getElementsByClassName('board');
+    for(let board of boards)
+    {
+
+        if(openedBoards.includes(board.id))
+        {
+            document.getElementById(`${board.id}`).lastChild.hidden = true;
+            document.cookie = `${board.id}=`;
+            document.cookie = `${board.id}=opened`;
+
+            let upsideArrow = document.createElement('i');
+            upsideArrow.classList.add('fas');
+            upsideArrow.classList.add('fa-angle-up');
+            let downsideArrow = board.firstElementChild.firstElementChild.nextElementSibling;
+            downsideArrow.parentElement.replaceChild(upsideArrow, downsideArrow);
+            upsideArrow.addEventListener('click', closeBoard)
+        }
+    }
 }
 
 
