@@ -101,3 +101,21 @@ def update_card_positions(cursor, ids_and_positions):
                           SET position = %(position)s
                           WHERE id = %(card_id)s""",
                           {'position': int(position), 'card_id': int(ids_and_positions.get(position))})
+
+
+@connection.connection_handler
+def delete(cursor, subject, board_id):
+    if subject == 'board':
+        cursor.execute("""SELECT cards.id AS id
+                          FROM boards
+                          JOIN board_columns ON board_columns.board_id = boards.id
+                          JOIN cards ON cards.board_column_id = board_columns.id
+                          WHERE boards.id = %(board_id)s""", {'board_id': board_id})
+        rows = cursor.fetchall()
+        for row in rows:
+            cursor.execute("""DELETE FROM cards
+                              WHERE id = %(card_id)s""", {'card_id': int(row.get('id'))})
+        cursor.execute("""DELETE FROM board_columns
+                          WHERE board_id = %(board_id)s""", {'board_id': board_id})
+        cursor.execute("""DELETE FROM boards
+                          WHERE id = %(board_id)s""", {'board_id': board_id})

@@ -107,6 +107,12 @@ def login_and_register():
             return 'failed registration'
 
 
+@app.route('/delete', methods=['POST'])
+def delete():
+    data_manager.delete(request.json.get('subject'), request.json.get('id'))
+    return json.dumps({'attempt': 'successful'})
+
+
 def main():
     app.run(debug=True)
 

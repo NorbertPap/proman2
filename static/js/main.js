@@ -8,7 +8,7 @@ function init() {
     newColumnButtonPress();
     newCardButtonPress();
     makeTitleEditable();
-    // deleteButton();
+    deleteButton();
     boardOpener();
     openedBoardHandler();
 }
@@ -41,6 +41,7 @@ function changeArrowToUpside(downsideArrow)
     downsideArrow.parentElement.replaceChild(upsideArrow, downsideArrow);
     upsideArrow.addEventListener('click', function() { closeBoard(event.target.parentElement.parentElement) })
 }
+
 
 function closeBoard(board)
 {
@@ -159,6 +160,7 @@ function switchContentBoard(response)
     boardOpener();
     openedBoardHandler();
     newCardButtonPress();
+    deleteButton();
 }
 
 
@@ -322,6 +324,7 @@ const createNewColumn = (columnName, boardId) => {
     });
 };
 
+
 // better name for this function
 const newColumnButtonPress = () => {
     const btnList = document.getElementsByClassName('column');
@@ -431,6 +434,37 @@ const createNewCard = (cardName, boardColumnId, position) => {
         }
     });
 };
+
+
+function deleteButton()
+{
+    const deleteButtons = document.getElementsByClassName('fa-times');
+    for(let deleteButton of deleteButtons)
+    {
+        deleteButton.addEventListener('click', function(event)
+        {
+            const board = event.target;
+            const url = '/delete';
+            const subject = {subject: 'board', id: board.getAttribute('id').replace('x', '')};
+            fetch(url,
+                {
+                method: 'POST',
+                headers:
+                    {
+                    "Content-Type": "application/json; charset=utf-8",
+                    },
+                body: JSON.stringify(subject)
+                })
+                .then((response) => response.json())
+                .then((response) => {
+                    if(response.attempt === 'successful')
+                    {
+                        reloadPageBoard()
+                    }
+                });
+        });
+    }
+}
 
 
 init();
