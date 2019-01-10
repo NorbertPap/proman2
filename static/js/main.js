@@ -361,6 +361,12 @@ function makeTitleEditable() {
     for (const span of spans) {
         if (span.contentEditable) {
             span.onblur = function () {
+                if(span.innerText.length < 1)
+                {
+                    alert('Board name can\'t be empty');
+                    span.innerText = span.dataset.original;
+                    return
+                }
                 const url = '/edit_titles';
                 const subject = {subject: 'board_title', title: span.innerText, id: span.getAttribute('data-id')};
                 fetch(url, {
@@ -373,6 +379,7 @@ function makeTitleEditable() {
                 .then((response) => response.json())
                 .then((data) => {
                 });
+                 span.dataset.original = span.innerText;
             }
         }
     }
@@ -380,6 +387,12 @@ function makeTitleEditable() {
     for (const column of column_names) {
         if (column.contentEditable) {
             column.onblur = function () {
+                if(column.innerText.length < 1)
+                {
+                    alert('Column name can\'t be empty');
+                    column.innerText = column.dataset.original;
+                    return
+                }
                 const url = '/edit_titles';
                 const subject = {subject: 'column_title', title: column.innerText, original: column.getAttribute('data-original'), id: column.getAttribute('data-boardid')};
                 fetch(url, {
@@ -392,6 +405,7 @@ function makeTitleEditable() {
                 .then((response) => response.json())
                 .then((data) => {
                 });
+                column.dataset.original = column.innerText;
             }
         }
     }

@@ -125,7 +125,7 @@
             {% for i in range(board_tree|length) %}
                 <div class="container board" id="{{board_tree[i].get('id')}}">
                     <h2 class="row private-{{board_tree[i].get('private')}}">
-                        <span data-id="{{board_tree[i].get('id')}}" contenteditable="true">{{ board_tree[i].get('title') }}</span>
+                        <span data-id="{{board_tree[i].get('id')}}" data-original="{{ board_tree[i].get('title') }}" contenteditable="true">{{ board_tree[i].get('title') }}</span>
                         <i class="fas fa-angle-down board-opener"></i>
                         <form class="form-inline margined">
                             <input type="text" class="form-control" value="" id="{{board_tree[i].get('id')}}-input">
