@@ -109,3 +109,16 @@ input[type=password]{
 .margined {
     margin: 0 20px;
 }
+
+.new-card {
+    margin-top: 5px;
+}
+
+.delete-card-icon {
+    font-size: 0.6em;
+}
+
+.delete-column-icon {
+    color: black;
+    font-size: 1.2em;
+}

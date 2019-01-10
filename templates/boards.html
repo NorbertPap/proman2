@@ -131,16 +131,26 @@
                             <input type="text" class="form-control" value="" id="{{board_tree[i].get('id')}}-input">
                             <button type="button" class="btn btn-outline-secondary column" id="{{board_tree[i].get('id')}}-column">Create new column</button>
                         </form>
-                        <i id="x{{board_tree[i].get('id')}}" class="fas fa-times"></i>
+                        <i data-id="{{board_tree[i].get('id')}}" data-target="board" class="fas fa-times"></i>
                     </h2>
                     <div class="row private-{{board_tree[i].get('private')}}" id="{{ i }}-body" hidden>
                         {% for j in range(board_tree[i].get('columns')|length) %}
                             <!-- column -->
                             <div class="col column-space" id="{{board_tree[i].get('columns')[j].get('id')}}">
-                                <h4 data-boardid="{{board_tree[i].get('id')}}" data-original="{{ board_tree[i].get('columns')[j].get('column_name') }}" contenteditable="true">{{ board_tree[i].get('columns')[j].get('column_name') }}</h4>
+                                <h4 data-boardid="{{board_tree[i].get('id')}}" data-original="{{ board_tree[i].get('columns')[j].get('column_name') }}" contenteditable="true">
+                                    {{ board_tree[i].get('columns')[j].get('column_name') }}
+                                </h4>
+                                <span>
+                                    <i data-target="column" data-id="{{ board_tree[i].get('columns')[j].get('id') }}" class="fas fa-times delete-column-icon"></i>
+                                </span>
                                 <div id="{{ i }}{{ j }}" class="cards_column">
                                     {% for card in board_tree[i].get('columns')[j].get('cards') %}
-                                        <div class="card" data-card_id="{{ card.get('id') }}">{{ card.get('title') }}</div>
+                                        <div class="card" data-card_id="{{ card.get('id') }}">
+                                            {{ card.get('title') }}
+                                            <span>
+                                                <i data-target="card" data-id="{{ card.get('id') }}" class="fas fa-times delete-card-icon"></i>
+                                            </span>
+                                        </div>
                                     {% endfor %}
                                 </div>
                                 <div align="center">

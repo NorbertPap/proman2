@@ -38,11 +38,12 @@ def user_login(cursor, email, password):
 def get_board_tree(cursor, user_id):
     cursor.execute("""SELECT * FROM boards
                       WHERE private = 0 OR user_id = %(user_id)s
-                      ORDER by private DESC""", {'user_id': user_id})
+                      ORDER by private DESC, id ASC""", {'user_id': user_id})
     boards = cursor.fetchall()
     for board in boards:
         cursor.execute("""SELECT * FROM board_columns
-                          WHERE board_id = %(board_id)s""", {'board_id': board.get('id')})
+                          WHERE board_id = %(board_id)s
+                          ORDER BY id ASC""", {'board_id': board.get('id')})
         board['columns'] = cursor.fetchall()
         for board_column in board['columns']:
             cursor.execute("""SELECT * FROM cards
@@ -104,18 +105,26 @@ def update_card_positions(cursor, ids_and_positions):
 
 
 @connection.connection_handler
-def delete(cursor, subject, board_id):
+def delete(cursor, subject, _id):
     if subject == 'board':
         cursor.execute("""SELECT cards.id AS id
                           FROM boards
                           JOIN board_columns ON board_columns.board_id = boards.id
                           JOIN cards ON cards.board_column_id = board_columns.id
-                          WHERE boards.id = %(board_id)s""", {'board_id': board_id})
+                          WHERE boards.id = %(_id)s""", {'_id': _id})
         rows = cursor.fetchall()
         for row in rows:
             cursor.execute("""DELETE FROM cards
                               WHERE id = %(card_id)s""", {'card_id': int(row.get('id'))})
         cursor.execute("""DELETE FROM board_columns
-                          WHERE board_id = %(board_id)s""", {'board_id': board_id})
+                          WHERE board_id = %(_id)s""", {'_id': _id})
         cursor.execute("""DELETE FROM boards
-                          WHERE id = %(board_id)s""", {'board_id': board_id})
+                          WHERE id = %(_id)s""", {'_id': _id})
+    elif subject == 'column':
+        cursor.execute("""DELETE FROM cards
+                          WHERE board_column_id = %(_id)s""", {'_id': _id})
+        cursor.execute("""DELETE FROM board_columns
+                          WHERE id = %(_id)s""", {'_id': _id})
+    elif subject == 'card':
+        cursor.execute("""DELETE FROM cards
+                          WHERE id = %(_id)s""", {'_id': _id})

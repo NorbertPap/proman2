@@ -161,6 +161,7 @@ function switchContentBoard(response)
     openedBoardHandler();
     newCardButtonPress();
     deleteButton();
+    makeTitleEditable();
 }
 
 
@@ -445,7 +446,7 @@ function deleteButton()
         {
             const board = event.target;
             const url = '/delete';
-            const subject = {subject: 'board', id: board.getAttribute('id').replace('x', '')};
+            const subject = {subject: event.target.dataset.target, id: event.target.dataset.id};
             fetch(url,
                 {
                 method: 'POST',
